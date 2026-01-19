@@ -1,0 +1,100 @@
+body {
+  margin: 0;
+  background: #f6f7fb;
+  font-family: Arial;
+}
+
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  padding: 15px 30px;
+  background: white;
+  border-bottom: 1px solid #ddd;
+}
+
+.chat {
+  max-width: 900px;
+  margin: auto;
+  padding: 30px 20px 200px;
+}
+
+.welcome {
+  text-align: center;
+  background: white;
+  padding: 20px;
+  border-radius: 12px;
+}
+
+.bubble {
+  padding: 14px 18px;
+  border-radius: 14px;
+  margin: 12px 0;
+  max-width: 80%;
+}
+
+.user {
+  background: #2563eb;
+  color: white;
+  margin-left: auto;
+}
+
+.ai {
+  background: white;
+}
+
+.footer {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  background: black;
+  padding: 14px;
+  display: flex;
+  justify-content: center;
+}
+
+.file-pill {
+  background: #111;
+  color: white;
+  padding: 10px 18px;
+  border-radius: 999px;
+  cursor: pointer;
+}
+
+button {
+  background: #2563eb;
+  border: none;
+  color: white;
+  padding: 10px 18px;
+  border-radius: 999px;
+}
+
+.progress {
+  position: fixed;
+  bottom: 90px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 340px;
+  background: #e5e7eb;
+  border-radius: 12px;
+  padding: 10px;
+  z-index: 9999;
+  text-align: center;
+}
+#progressBar {
+  height: 18px;
+  background: linear-gradient(90deg, #2563eb, #22c55e);
+  border-radius: 999px;
+  width: 0%;
+  transition: width 0.3s ease;
+}
+
+#progressText {
+  font-size: 13px;
+  font-weight: bold;
+  margin-top: 6px;
+  color: #111;
+}
+
+.hidden {
+  display: none;
+}

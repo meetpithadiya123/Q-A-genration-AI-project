@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>PDF AI Assistant</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+
+<header class="topbar">
+  <b>📘 PDF AI Assistant</b>
+  <span>by Meet Pithadiya</span>
+</header>
+
+<main class="chat" id="chat">
+  <div class="welcome" id="welcome">👋 Upload a PDF and click Generate</div>
+</main>
+
+<!-- Progress bar -->
+<div id="progressBox" class="progress hidden">
+  <div id="progressBar"></div>
+  <div id="progressText">0%</div>
+</div>
+
+<!-- Footer -->
+<footer class="footer">
+  <form id="uploadForm">
+    <label class="file-pill">
+      <span id="fileName">Upload PDF</span>
+      <input type="file" id="fileInput" hidden required>
+    </label>
+    <button id="generateBtn">Generate</button>
+  </form>
+</footer>
+
+<script>
+const input = document.getElementById("fileInput");
+const fileName = document.getElementById("fileName");
+const form = document.getElementById("uploadForm");
+const btn = document.getElementById("generateBtn");
+const bar = document.getElementById("progressBar");
+const text = document.getElementById("progressText");
+const box = document.getElementById("progressBox");
+const chat = document.getElementById("chat");
+const welcome = document.getElementById("welcome");
+
+input.addEventListener("change", () => {
+  if (input.files.length) {
+    fileName.innerText = input.files[0].name;
+  }
+});
+
+form.addEventListener("submit", async e => {
+  e.preventDefault();
+  welcome.style.display = "none";
+
+  // show user bubble immediately
+  const userBubble = document.createElement("div");
+  userBubble.className = "bubble user";
+  userBubble.innerText = input.files[0].name;
+  chat.appendChild(userBubble);
+
+  // show progress
+  box.classList.remove("hidden");
+  btn.disabled = true;
+  btn.innerText = "Generating...";
+
+  const data = new FormData();
+  data.append("file", input.files[0]);
+
+  // start upload
+  await fetch("/upload", { method: "POST", body: data });
+
+  // poll progress
+  const interval = setInterval(async () => {
+    const res = await fetch("/progress");
+    const p = await res.json();
+    bar.style.width = p.percent + "%";
+    text.innerText = p.percent + "% – " + p.msg;
+
+    if (p.percent >= 100) {
+      clearInterval(interval);
+
+      const result = await fetch("/result");
+      const json = await result.json();
+
+      const aiBubble = document.createElement("div");
+      aiBubble.className = "bubble ai";
+      aiBubble.innerHTML = json.answers
+        .map(a => `<p>${a.replace(/\n/g, "<br>")}</p>`)
+        .join("");
+      chat.appendChild(aiBubble);
+
+      box.classList.add("hidden");
+      btn.disabled = false;
+      btn.innerText = "Generate";
+
+      input.value = "";
+      fileName.innerText = "Upload PDF";
+    }
+
+  }, 400);
+});
+</script>
+
+</body>
+</html>

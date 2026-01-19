@@ -1,0 +1,7 @@
+fastapi
+uvicorn
+pypdf
+jinja2
+python-multipart
+langchain-core
+langchain-ollama
